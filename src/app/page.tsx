@@ -1,10 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Newspaper, Save, Target, TrendingUp, PenTool } from "lucide-react";
+import { BookOpen, Newspaper, Save, Target, TrendingUp, PenTool, User as UserIcon, LogOut } from "lucide-react";
+import { useAuth } from "@/components/auth-provider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Home() {
+  const { user, logout, isAuthenticated } = useAuth();
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* NAV */}
@@ -33,12 +46,47 @@ export default function Home() {
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/login">
-              <Button variant="ghost" className="hidden md:flex">Sign In</Button>
-            </Link>
-            <Link href="/register">
-              <Button className="bg-gold hover:bg-gold-light text-background">Get Started</Button>
-            </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <Link href={`/${user?.role}`} className="hidden md:block">
+                  <Button variant="ghost">Dashboard</Button>
+                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-muted">
+                      <UserIcon className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user?.name || user?.email}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href={`/${user?.role}`}>Dashboard</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" className="hidden md:flex">Sign In</Button>
+                </Link>
+                <Link href="/register">
+                  <Button className="bg-gold hover:bg-gold-light text-background">Get Started</Button>
+                </Link>
+              </>
+            )}
             <ThemeToggle />
           </div>
         </div>

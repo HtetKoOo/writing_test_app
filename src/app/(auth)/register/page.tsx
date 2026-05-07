@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, AlertCircle } from "lucide-react";
+import { useAuth } from "@/components/auth-provider";
 
 export default function RegisterPage() {
+  const { register: registerAuth } = useAuth();
   const [passwordVisible1, setPasswordVisible1] = useState(false);
   const [passwordVisible2, setPasswordVisible2] = useState(false);
   const [password, setPassword] = useState("");
@@ -17,6 +19,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Strength checker logic
   const checkStr = (pw: string) => {
@@ -41,13 +44,20 @@ export default function RegisterPage() {
   const currentColorClass = password ? strColors[strLevel] : "bg-muted";
   const currentLabel = password ? strLabels[strLevel] : "";
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      await registerAuth({ name, email, password });
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to create account. Please try again.");
       setIsLoading(false);
-    }, 1500);
+    }
   };
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 relative">
@@ -133,7 +143,11 @@ export default function RegisterPage() {
           
           <div className="grid gap-6">
             <div className="flex flex-col gap-3">
-              <Button variant="outline" className="w-full h-12 flex gap-2">
+              <Button 
+                variant="outline" 
+                className="w-full h-12 flex gap-2"
+                onClick={() => window.location.href = `${API_URL}/auth/google`}
+              >
                 <svg width="18" height="18" viewBox="0 0 18 18">
                   <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
                   <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
@@ -156,6 +170,12 @@ export default function RegisterPage() {
             </div>
 
             <form onSubmit={onSubmit} className="grid gap-4">
+              {error && (
+                <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-md flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  {error}
+                </div>
+              )}
               <div className="grid gap-2">
                 <Label htmlFor="name">Full name</Label>
                 <Input

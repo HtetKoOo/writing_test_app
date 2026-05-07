@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: .
+    container_name: ielts_frontend_dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env.local
+    stdin_open: true # Next.js dev mode အတွက် လိုအပ်နိုင်သည်
+    tty: true
