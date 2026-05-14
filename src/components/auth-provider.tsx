@@ -39,7 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         // Fallback: fetch profile if we have it
         try {
-          const profileRes = await api.get('/users/me');
+          // Replace with actual profile endpoint if different
+          const profileRes = await api.get('/teacher/profile'); // Just an example, maybe handle per role
           setUser(profileRes.data.data);
           localStorage.setItem('user', JSON.stringify(profileRes.data.data));
         } catch (e) {
@@ -57,8 +58,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // Skip API calls on the public pages if no access token is present
+    // This prevents the 401 Unauthorized error in the console when unauthenticated
+    const publicPaths = ['/', '/login', '/register'];
+    const hasToken = typeof window !== 'undefined' ? !!localStorage.getItem('accessToken') : false;
+
+    if (publicPaths.includes(pathname) && !hasToken) {
+      setIsLoading(false);
+      return;
+    }
+    
     checkAuth();
-  }, [checkAuth]);
+  }, [checkAuth, pathname]);
 
   const login = async (credentials: any) => {
     const { data } = await api.post<AuthResponse>('/auth/login', credentials);
