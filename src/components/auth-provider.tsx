@@ -24,34 +24,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = useCallback(async () => {
     try {
-      // Small delay to ensure cookies are ready or just go straight to refresh
-      const { data } = await api.post('/auth/refresh');
-      const { accessToken } = data.data;
-
-      localStorage.setItem('accessToken', accessToken);
-
-      // Get user profile - need an endpoint for this, or extract from refresh?
-      // Express refresh doesn't return user, but we can call /profile or similar
-      // For now, let's assume we need a /auth/me or similar, OR we store user in localStorage too
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      // Check auth by trying to fetch the user profile.
+      // If the token is expired, api.ts interceptor will automatically handle the refresh.
+      const { data } = await api.get('/users/me');
+      
+      if (data && data.data) {
+        setUser(data.data);
+        localStorage.setItem('user', JSON.stringify(data.data));
       } else {
-        // Fallback: fetch profile if we have it
-        try {
-          // Replace with actual profile endpoint if different
-          const profileRes = await api.get('/teacher/profile'); // Just an example, maybe handle per role
-          setUser(profileRes.data.data);
-          localStorage.setItem('user', JSON.stringify(profileRes.data.data));
-        } catch (e) {
-          console.error("Failed to fetch profile", e);
+        // Fallback to local storage if API doesn't return full user object
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
         }
       }
     } catch (error) {
-      console.error("Auth check failed", error);
+      // We don't need to console.error here because Axios interceptor already handles it
+      // and it pollutes the console when user is simply unauthenticated
       setUser(null);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
+      
+      // If we are on a protected route and auth fails, redirect to login
+      const publicPaths = ['/', '/login', '/register'];
+      if (typeof window !== 'undefined' && !publicPaths.includes(window.location.pathname)) {
+        window.location.href = '/login';
+      }
     } finally {
       setIsLoading(false);
     }
