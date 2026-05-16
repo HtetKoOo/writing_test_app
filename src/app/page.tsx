@@ -34,13 +34,13 @@ export default function Home() {
               <Link href="#features" className="transition-colors hover:text-foreground/80 text-foreground/60">
                 Features
               </Link>
-              <Link href="#" className="transition-colors hover:text-foreground/80 text-foreground/60">
+              <Link href="/student/practice" className="transition-colors hover:text-foreground/80 text-foreground/60">
                 Practice
               </Link>
-              <Link href="#" className="transition-colors hover:text-foreground/80 text-foreground/60">
+              <Link href="/student/vocabulary" className="transition-colors hover:text-foreground/80 text-foreground/60">
                 Vocabulary
               </Link>
-              <Link href="#" className="transition-colors hover:text-foreground/80 text-foreground/60">
+              <Link href="/student/news" className="transition-colors hover:text-foreground/80 text-foreground/60">
                 News
               </Link>
             </nav>
