@@ -25,13 +25,19 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 interface Task {
   id: string;
   _id?: string;
   title: string;
-  status: string;
+  _title?: string;
   taskType: string;
+  _taskType?: string;
+  status: string;
+  _status?: string;
+  submittedAt?: string;
+  _submittedAt?: string;
   updatedAt: string;
   userId: string;
 }
@@ -79,9 +85,12 @@ export default function ReviewQueuePage() {
             <span className="text-zinc-400">Content Review</span>
           </div>
         </div>
-        <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 py-1 px-3">
-          {tasks.length} Pending Reviews
-        </Badge>
+        <div className="flex items-center gap-4">
+          <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 py-1 px-3">
+            {tasks.length} Pending Reviews
+          </Badge>
+          <NotificationDropdown />
+        </div>
       </header>
 
       {/* Main Content */}

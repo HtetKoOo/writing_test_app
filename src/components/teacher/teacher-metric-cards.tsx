@@ -16,7 +16,8 @@ export function TeacherMetricCards() {
         // We fetch all tasks assigned by this teacher and count statuses
         // In a real app, a dedicated /teacher/stats endpoint would be better
         const response = await api.get('/teacher/assigned-tasks');
-        const tasks = response.data.data.items || response.data.data || [];
+        const data = response.data?.data;
+        const tasks = Array.isArray(data) ? data : (data?.tasks || data?.items || []);
         
         const counts = tasks.reduce((acc: any, task: any) => {
           const status = task.status || task._status;

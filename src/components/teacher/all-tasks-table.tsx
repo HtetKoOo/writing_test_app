@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -48,7 +49,8 @@ export function AllTasksTable() {
         if (statusFilter !== 'all') params.status = statusFilter;
         
         const response = await api.get('/teacher/assigned-tasks', { params });
-        const items = response.data.data.items || response.data.data || [];
+        const data = response.data?.data;
+        const items = Array.isArray(data) ? data : (data?.tasks || data?.items || []);
         setTasks(items);
       } catch (error) {
         console.error("Failed to fetch tasks:", error);
@@ -152,9 +154,11 @@ export function AllTasksTable() {
                     </TableCell>
                     <TableCell className="text-xs text-zinc-400 font-mono py-3">{formatDate(task.dueDate || task._dueDate)}</TableCell>
                     <TableCell className="text-right py-3">
-                      <Button variant="ghost" size="sm" className="h-7 text-[11px] font-semibold text-zinc-300 border border-white/10 hover:text-white hover:bg-white/10">
-                        View
-                      </Button>
+                      <Link href={`/teacher/review/${task.id || task._id}`}>
+                        <Button variant="ghost" size="sm" className="h-7 text-[11px] font-semibold text-zinc-300 border border-white/10 hover:text-white hover:bg-white/10">
+                          {status === "SUBMITTED" ? "Review →" : "View"}
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 );

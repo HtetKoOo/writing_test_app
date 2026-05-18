@@ -1,12 +1,12 @@
 import React from "react";
 import { TeacherMetricCards } from "@/components/teacher/teacher-metric-cards";
 import { StudentList } from "@/components/teacher/student-list";
-import { ReviewQueueEmpty } from "@/components/teacher/review-queue-empty";
+import { ReviewQueue } from "@/components/teacher/review-queue";
 import { AllTasksTable } from "@/components/teacher/all-tasks-table";
-import { Search, Bell, Edit3 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 export default function TeacherDashboard() {
   return (
@@ -22,24 +22,15 @@ export default function TeacherDashboard() {
               <span className="text-zinc-400">Overview</span>
             </div>
           </div>
-          
-          <div className="relative hidden md:block w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
-            <Input 
-              placeholder="Search tasks, students..." 
-              className="pl-9 bg-[#1a211e] border-white/10 text-sm h-9 focus-visible:ring-1 focus-visible:ring-emerald-500 placeholder:text-zinc-600 rounded-md text-white"
-            />
-          </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="size-9 rounded-full bg-[#1a211e] border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10">
-            <Edit3 className="size-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="size-9 rounded-full bg-white text-black hover:bg-zinc-200">
-            <span className="sr-only">Notifications</span>
-            <Bell className="size-4" />
-          </Button>
+          <Link href="/teacher/assign">
+            <Button variant="ghost" size="icon" className="size-9 rounded-full bg-[#1a211e] border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10">
+              <Edit3 className="size-4" />
+            </Button>
+          </Link>
+          <NotificationDropdown />
         </div>
       </header>
 
@@ -49,7 +40,7 @@ export default function TeacherDashboard() {
           <TeacherMetricCards />
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             <StudentList />
-            <ReviewQueueEmpty />
+            <ReviewQueue />
           </div>
           <AllTasksTable />
         </div>

@@ -3,10 +3,10 @@ import { MetricCards } from "@/components/admin/metric-cards";
 import { ChartsSection } from "@/components/admin/charts-section";
 import { DataListsSection } from "@/components/admin/data-lists";
 import { RecentAuditsSection } from "@/components/admin/recent-audits";
-import { Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 export default function AdminDashboard() {
   return (
@@ -33,13 +33,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="size-9 rounded-full bg-[#1a211e] border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10">
-            <span className="sr-only">Notifications</span>
-            <div className="relative">
-              <Bell className="size-4" />
-              <span className="absolute -top-1 -right-1 size-2 bg-red-500 rounded-full border border-[#111614]" />
-            </div>
-          </Button>
+          <NotificationDropdown />
           <Avatar className="size-9 border-2 border-[var(--gold)]/30 rounded-full">
             <AvatarImage src="" />
             <AvatarFallback className="bg-white text-black font-bold text-xs">AD</AvatarFallback>

@@ -98,12 +98,16 @@ export function StudentList() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Button variant="outline" size="sm" className="bg-transparent border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 h-8">
-                    View tasks
-                  </Button>
-                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white h-8">
-                    + Assign task
-                  </Button>
+                  <Link href={`/teacher/student-tasks/${student.id || student._id}`}>
+                    <Button variant="outline" size="sm" className="bg-transparent border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 h-8">
+                      View tasks
+                    </Button>
+                  </Link>
+                  <Link href={`/teacher/assign?studentId=${student.id || student._id}`}>
+                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white h-8">
+                      + Assign task
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))

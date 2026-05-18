@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 export default function NotificationsPage() {
   const [audience, setAudience] = useState("all");
@@ -30,19 +31,15 @@ export default function NotificationsPage() {
         type,
         title: title.trim(),
         message: message.trim(),
+        ctaText: ctaText.trim(),
+        ctaUrl: ctaUrl.trim(),
       };
 
       if (audience === "individual") {
         payload.targetUserId = targetUserId.trim();
       }
-      if (ctaText.trim()) {
-        payload.ctaText = ctaText.trim();
-      }
-      if (ctaUrl.trim()) {
-        payload.ctaUrl = ctaUrl.trim();
-      }
 
-      await api.post("/admin/notifications", payload);
+      await api.post("/admin/notifications/send", payload);
       alert("Notification sent successfully!");
       setTitle("");
       setMessage("");
@@ -68,6 +65,9 @@ export default function NotificationsPage() {
             <span>›</span>
             <span className="text-zinc-400">Comms</span>
           </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <NotificationDropdown />
         </div>
       </header>
 

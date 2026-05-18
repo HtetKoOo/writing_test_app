@@ -35,6 +35,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 interface User {
   id: string;
@@ -91,10 +92,13 @@ export default function UsersPage() {
             <span className="text-zinc-400">Users</span>
           </div>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2 h-9 px-4 text-sm font-semibold transition-all shadow-lg shadow-blue-900/20">
-          <UserPlus className="size-4" />
-          Add New User
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2 h-9 px-4 text-sm font-semibold transition-all shadow-lg shadow-blue-900/20">
+            <UserPlus className="size-4" />
+            Add New User
+          </Button>
+          <NotificationDropdown />
+        </div>
       </header>
 
       {/* Main Content */}

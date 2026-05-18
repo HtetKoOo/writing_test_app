@@ -30,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 interface FlagItem {
   id?: string;
@@ -150,6 +151,9 @@ export default function ModerationPage() {
             <span>›</span>
             <span className="text-zinc-400">Content</span>
           </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <NotificationDropdown />
         </div>
       </header>
 

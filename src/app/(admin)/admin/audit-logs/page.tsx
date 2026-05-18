@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 interface AuditLog {
   id?: string;
@@ -231,6 +232,7 @@ export default function AuditLogsPage() {
             <Database className="size-4" />
             Export Logs
           </Button>
+          <NotificationDropdown />
         </div>
       </header>
 

@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 interface Task {
   id: string;
@@ -262,13 +263,16 @@ export default function TaskReviewDetailPage() {
           </div>
         </div>
 
-        {isScored && (
-          <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 py-1.5 px-4 rounded-xl">
-            <Award className="size-5 text-emerald-400" />
-            <span className="text-xs text-emerald-500 font-bold uppercase tracking-wider">Final Score:</span>
-            <span className="text-lg font-black text-emerald-400 font-mono">Band {bandScoreVal}</span>
-          </div>
-        )}
+        <div className="flex items-center gap-4">
+          {isScored && (
+            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 py-1.5 px-4 rounded-xl">
+              <Award className="size-5 text-emerald-400" />
+              <span className="text-xs text-emerald-500 font-bold uppercase tracking-wider">Final Score:</span>
+              <span className="text-lg font-black text-emerald-400 font-mono">Band {bandScoreVal}</span>
+            </div>
+          )}
+          <NotificationDropdown />
+        </div>
       </header>
 
       {/* Main Container */}

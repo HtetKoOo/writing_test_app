@@ -35,6 +35,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import api from "@/lib/api";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 interface Task {
   id: string;
@@ -107,6 +108,7 @@ export default function TasksPage() {
            <Badge variant="outline" className="bg-white/5 border-white/10 text-zinc-400 font-normal py-1 px-3">
              Total: {tasks.length}
            </Badge>
+           <NotificationDropdown />
         </div>
       </header>
 
