@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 import api from "@/lib/api";
 
 interface Task {
@@ -150,9 +151,11 @@ export default function ReviewQueuePage() {
                         {formatDate(task.updatedAt)}
                       </TableCell>
                       <TableCell className="text-right pr-6">
-                        <Button className="bg-amber-600 hover:bg-amber-700 text-white gap-2 h-8 px-4 text-xs font-semibold shadow-lg shadow-amber-900/20 transition-all">
-                          Review Task
-                          <ArrowRight className="size-3" />
+                        <Button asChild className="bg-amber-600 hover:bg-amber-700 text-white gap-2 h-8 px-4 text-xs font-semibold shadow-lg shadow-amber-900/20 transition-all cursor-pointer">
+                          <Link href={`/admin/review/${task.id || task._id}`}>
+                            Review Task
+                            <ArrowRight className="size-3 inline-block ml-2" />
+                          </Link>
                         </Button>
                       </TableCell>
                     </TableRow>

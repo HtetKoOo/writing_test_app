@@ -33,6 +33,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 import api from "@/lib/api";
 
 interface Task {
@@ -209,11 +210,17 @@ export default function TasksPage() {
                           <DropdownMenuContent align="end" className="w-48 bg-[#1a211e] border-white/10 text-zinc-300 shadow-2xl">
                             <DropdownMenuLabel className="text-xs text-zinc-500 uppercase tracking-widest px-3 py-2">Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator className="bg-white/5" />
-                            <DropdownMenuItem className="gap-3 px-3 py-2 hover:bg-white/5 focus:bg-white/5 cursor-pointer">
-                              <Eye className="size-4 text-zinc-400" /> View Content
+                            <DropdownMenuItem asChild className="gap-3 px-3 py-2 hover:bg-white/5 focus:bg-white/5 cursor-pointer">
+                              <Link href={`/admin/review/${task.id || task._id}`}>
+                                <Eye className="size-4 text-zinc-400 inline-block mr-2" />
+                                View Content
+                              </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="gap-3 px-3 py-2 hover:bg-white/5 focus:bg-white/5 cursor-pointer">
-                              <FileEdit className="size-4 text-zinc-400" /> Review / Score
+                            <DropdownMenuItem asChild className="gap-3 px-3 py-2 hover:bg-white/5 focus:bg-white/5 cursor-pointer">
+                              <Link href={`/admin/review/${task.id || task._id}`}>
+                                <FileEdit className="size-4 text-zinc-400 inline-block mr-2" />
+                                Review / Score
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-white/5" />
                             <DropdownMenuItem className="gap-3 px-3 py-2 hover:bg-white/5 focus:bg-white/5 cursor-pointer">

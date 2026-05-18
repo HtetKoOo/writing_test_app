@@ -109,8 +109,10 @@ export function DataListsSection() {
                       {item.taskType || item._taskType || "TASK_1"} • Submitted {formatDate(item.updatedAt || item._updatedAt || item.createdAt || item._createdAt)}
                     </span>
                   </div>
-                  <Button variant="outline" size="sm" className="bg-transparent border-[var(--gold)]/30 text-[var(--gold)] hover:bg-[var(--gold)]/10 hover:text-[var(--gold)] h-8 px-3">
-                    Review
+                  <Button asChild variant="outline" size="sm" className="bg-transparent border-[var(--gold)]/30 text-[var(--gold)] hover:bg-[var(--gold)]/10 hover:text-[var(--gold)] h-8 px-3 cursor-pointer">
+                    <Link href={`/admin/review/${item.id || item._id}`}>
+                      Review
+                    </Link>
                   </Button>
                 </div>
               ))
@@ -173,8 +175,10 @@ export function DataListsSection() {
                       <TableCell className="text-zinc-400 text-sm py-4">{bandScore}</TableCell>
                       <TableCell className="text-xs text-zinc-500 max-w-[80px] py-4">{formatDate(activity.updatedAt || activity._updatedAt)}</TableCell>
                       <TableCell className="text-right py-4">
-                        <Button variant="ghost" size="sm" className="h-8 text-xs text-zinc-400 border border-white/10 hover:text-white hover:bg-white/10">
-                          View
+                        <Button asChild variant="ghost" size="sm" className="h-8 text-xs text-zinc-400 border border-white/10 hover:text-white hover:bg-white/10 cursor-pointer">
+                          <Link href={`/admin/review/${activity.id || activity._id}`}>
+                            View
+                          </Link>
                         </Button>
                       </TableCell>
                     </TableRow>
