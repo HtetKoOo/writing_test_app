@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3000/api/:path*', // Backend ဆီ လွှဲပေးမယ်
+        destination: 'https://express-js-2kxb.onrender.com/api/:path*', // Backend ဆီ လွှဲပေးမယ်
       },
     ];
   },

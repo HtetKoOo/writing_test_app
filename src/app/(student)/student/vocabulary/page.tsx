@@ -8,6 +8,7 @@ import { Search, Book, Volume2, Sparkles, MessageSquare, History } from "lucide-
 import { Badge } from "@/components/ui/badge";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function VocabularyPage() {
   const [word, setWord] = useState("");
@@ -39,9 +40,12 @@ export default function VocabularyPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-[#111614]">
-        <div>
-          <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Vocabulary Builder</h1>
-          <p className="text-zinc-500 text-sm mt-1">Enhance your writing with high-band academic words.</p>
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
+          <div>
+            <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Vocabulary Builder</h1>
+            <p className="text-zinc-500 text-sm mt-1">Enhance your writing with high-band academic words.</p>
+          </div>
         </div>
       </header>
 

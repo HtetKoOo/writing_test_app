@@ -9,6 +9,7 @@ import { Search, PenTool, Clock, ChevronRight, Filter } from "lucide-react";
 import Link from "next/link";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function PracticePage() {
   const [tasks, setTasks] = useState<any[]>([]);
@@ -40,9 +41,12 @@ export default function PracticePage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-[#111614]">
-        <div>
-          <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Writing Practice</h1>
-          <p className="text-zinc-500 text-sm mt-1">Select a task to begin your simulation.</p>
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
+          <div>
+            <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Writing Practice</h1>
+            <p className="text-zinc-500 text-sm mt-1">Select a task to begin your simulation.</p>
+          </div>
         </div>
       </header>
 

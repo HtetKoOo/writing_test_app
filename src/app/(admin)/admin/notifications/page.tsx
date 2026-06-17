@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import { NotificationDropdown } from "@/components/notification-dropdown";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function NotificationsPage() {
   const [audience, setAudience] = useState("all");
@@ -58,12 +59,15 @@ export default function NotificationsPage() {
     <div className="flex flex-col min-h-screen">
       {/* Topbar/Header */}
       <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614] select-none">
-        <div>
-          <h1 className="text-xl font-bold text-white tracking-tight">Notifications</h1>
-          <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">
-            <span>Admin</span>
-            <span>›</span>
-            <span className="text-zinc-400">Comms</span>
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
+          <div>
+            <h1 className="text-xl font-bold text-white tracking-tight">Notifications</h1>
+            <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">
+              <span>Admin</span>
+              <span>›</span>
+              <span className="text-zinc-400">Comms</span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-4">

@@ -101,7 +101,7 @@ export function ReviewQueue() {
             <CardTitle className="text-sm font-semibold text-white">Review Queue</CardTitle>
           </div>
           <span className="text-xs text-zinc-500 font-mono tracking-tight hidden sm:block">
-            Submitted tasks waiting for your feedback
+            Submitted tasks · oldest first · shows time of submission
           </span>
         </CardHeader>
         <CardContent className="mt-2 flex flex-col items-center justify-center min-h-[200px] gap-2 pb-10">
@@ -121,7 +121,7 @@ export function ReviewQueue() {
           <CardTitle className="text-sm font-semibold text-white">Review Queue</CardTitle>
         </div>
         <span className="text-xs text-zinc-500 font-mono tracking-tight hidden sm:block">
-          Submitted tasks waiting for your feedback
+          Submitted tasks · oldest first · shows time of submission
         </span>
       </CardHeader>
       <CardContent className="p-0">
@@ -138,7 +138,7 @@ export function ReviewQueue() {
             return (
               <div
                 key={tid || i}
-                className="flex items-center justify-between p-5 border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors gap-4"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors gap-4"
               >
                 <div className="flex-1 min-w-0">
                   <span className="block text-sm font-semibold text-zinc-200 truncate leading-snug">
@@ -156,7 +156,7 @@ export function ReviewQueue() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 justify-between sm:justify-start">
                   <Badge className="bg-[var(--gold)]/10 text-[var(--gold)] border border-[var(--gold)]/20 text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 select-none">
                     SUBMITTED
                   </Badge>

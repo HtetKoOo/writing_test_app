@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Backend URL - can be moved to env later
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+// Backend URL - defaults to Render backend
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://express-js-2kxb.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -62,7 +62,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.post(`${API_URL}/auth/refresh`, {}, { withCredentials: true });
-        const { accessToken } = data.data; // data.data because of the response formatter in express
+        const accessToken = data.data.token || data.data.accessToken;
 
         localStorage.setItem('accessToken', accessToken);
         api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;

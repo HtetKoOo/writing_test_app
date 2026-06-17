@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,12 +49,10 @@ export function StudentList() {
     <Card className="bg-[#1a211e] border-white/5 rounded-xl shadow-none">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center gap-2">
-          <div className="size-5 rounded bg-amber-500/10 flex items-center justify-center">
-            <span className="text-[10px]">👨‍🎓</span>
-          </div>
+          <Users className="size-4 text-zinc-400" />
           <CardTitle className="text-sm font-semibold text-white">Your Students</CardTitle>
         </div>
-        <Link href="/teacher/assign" className="text-xs text-blue-400 flex items-center hover:text-blue-300 transition-colors">
+        <Link href="/teacher/assign" className="text-xs text-zinc-400 flex items-center hover:text-white transition-colors">
           + Assign task <ArrowRight className="size-3 ml-1" />
         </Link>
       </CardHeader>
@@ -80,7 +78,7 @@ export function StudentList() {
               <div key={student.id || student._id || i} className="flex flex-col sm:flex-row sm:items-center justify-between py-5 border-b border-white/5 last:border-0 gap-4 sm:gap-0">
                 <div className="flex items-center gap-4">
                   <Avatar className="size-10 border border-white/10">
-                    <AvatarFallback className="bg-[#4d6a45] text-white font-bold">
+                    <AvatarFallback className="bg-[#ebd48c] text-[#544321] font-bold">
                       {getInitial(student.name)}
                     </AvatarFallback>
                   </Avatar>
@@ -97,15 +95,20 @@ export function StudentList() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Link href={`/teacher/students?studentId=${student.id || student._id}`}>
+                    <Button variant="outline" size="sm" className="bg-transparent border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 h-8 text-xs font-semibold px-4 rounded-md">
+                      Profile
+                    </Button>
+                  </Link>
                   <Link href={`/teacher/student-tasks/${student.id || student._id}`}>
-                    <Button variant="outline" size="sm" className="bg-transparent border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 h-8">
-                      View tasks
+                    <Button variant="outline" size="sm" className="bg-transparent border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 h-8 text-xs font-semibold px-4 rounded-md">
+                      Tasks
                     </Button>
                   </Link>
                   <Link href={`/teacher/assign?studentId=${student.id || student._id}`}>
-                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white h-8">
-                      + Assign task
+                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white h-8 text-xs font-semibold px-4 rounded-md">
+                      + Assign
                     </Button>
                   </Link>
                 </div>

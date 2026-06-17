@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
 import { NotificationDropdown } from "@/components/notification-dropdown";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface Task {
   id: string;
@@ -237,6 +238,7 @@ export default function TaskReviewDetailPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
         <div className="flex items-center gap-4">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
           <Button 
             onClick={() => router.push("/admin/review")} 
             variant="ghost" 

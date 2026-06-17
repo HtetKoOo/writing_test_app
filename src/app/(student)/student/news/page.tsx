@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Newspaper, ExternalLink, Bookmark, Clock, Flame } from "lucide-react";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function NewsPage() {
   const [news, setNews] = useState<any[]>([]);
@@ -40,9 +41,12 @@ export default function NewsPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-[#111614]">
-        <div>
-          <h1 className="text-2xl font-bold text-white font-serif tracking-tight text-emerald-500">Global News Feed</h1>
-          <p className="text-zinc-500 text-sm mt-1">Practice reading with articles relevant to IELTS topics.</p>
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
+          <div>
+            <h1 className="text-2xl font-bold text-white font-serif tracking-tight text-emerald-500">Global News Feed</h1>
+            <p className="text-zinc-500 text-sm mt-1">Practice reading with articles relevant to IELTS topics.</p>
+          </div>
         </div>
       </header>
 

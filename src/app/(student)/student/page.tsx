@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/auth-provider";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function StudentDashboard() {
   const { user } = useAuth();
@@ -17,7 +18,8 @@ export default function StudentDashboard() {
     <div className="flex flex-col min-h-screen">
       {/* Top Header */}
       <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-4 md:gap-12">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
           <div>
             <h1 className="text-xl font-bold text-white tracking-tight">Student Dashboard</h1>
             <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">

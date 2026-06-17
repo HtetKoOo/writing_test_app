@@ -57,7 +57,7 @@ export default function RegisterPage() {
     }
   };
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://express-js-2kxb.onrender.com/api';
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 relative">

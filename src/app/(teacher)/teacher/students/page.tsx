@@ -11,6 +11,7 @@ import { Search, ArrowLeft, Users, CheckCircle, Clock } from "lucide-react";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NotificationDropdown } from "@/components/notification-dropdown";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface Student {
   id: string;
@@ -69,6 +70,7 @@ export default function MyStudentsPage() {
       {/* Top Header */}
       <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
         <div className="flex items-center gap-4">
+          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
           <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
             <ArrowLeft className="size-3.5" /> Dashboard
           </Link>

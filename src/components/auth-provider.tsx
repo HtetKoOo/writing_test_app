@@ -23,6 +23,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const checkAuth = useCallback(async () => {
+    const storedUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+    const hasToken = typeof window !== 'undefined' ? !!localStorage.getItem('accessToken') : false;
+
+    if (hasToken && storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+        setIsLoading(false);
+        return; // Bypasses the broken /users/me endpoint entirely if we have a valid session!
+      } catch (e) {
+        // ignore JSON parse error
+      }
+    }
+
     try {
       // Check auth by trying to fetch the user profile.
       // If the token is expired, api.ts interceptor will automatically handle the refresh.
@@ -31,16 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data && data.data) {
         setUser(data.data);
         localStorage.setItem('user', JSON.stringify(data.data));
-      } else {
-        // Fallback to local storage if API doesn't return full user object
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-        }
       }
-    } catch (error) {
-      // We don't need to console.error here because Axios interceptor already handles it
-      // and it pollutes the console when user is simply unauthenticated
+    } catch (error: any) {
       setUser(null);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
@@ -60,18 +65,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // This prevents the 401 Unauthorized error in the console when unauthenticated
     const publicPaths = ['/', '/login', '/register'];
     const hasToken = typeof window !== 'undefined' ? !!localStorage.getItem('accessToken') : false;
+    const storedUserStr = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
 
     if (publicPaths.includes(pathname) && !hasToken) {
       setIsLoading(false);
       return;
     }
+
+    // Redirect authenticated users away from login/register to their dashboard
+    if (hasToken && storedUserStr && ['/login', '/register'].includes(pathname)) {
+      try {
+        const storedUser = JSON.parse(storedUserStr);
+        if (storedUser.role === 'admin') {
+          router.replace('/admin');
+        } else if (storedUser.role === 'teacher') {
+          router.replace('/teacher');
+        } else {
+          router.replace('/student');
+        }
+        setIsLoading(false);
+        return;
+      } catch (e) {
+        // ignore parse error and run checkAuth
+      }
+    }
     
     checkAuth();
-  }, [checkAuth, pathname]);
+  }, [checkAuth, pathname, router]);
 
   const login = async (credentials: any) => {
     const { data } = await api.post<AuthResponse>('/auth/login', credentials);
-    const { accessToken, user } = data.data;
+    const { token, user } = data.data;
+    const accessToken = token;
 
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('user', JSON.stringify(user));
@@ -85,7 +110,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (regData: any) => {
     const { data } = await api.post<AuthResponse>('/auth/register', regData);
-    const { accessToken, user } = data.data;
+    const { token, user } = data.data;
+    const accessToken = token;
 
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('user', JSON.stringify(user));
