@@ -8,7 +8,7 @@ import { Search, Book, Volume2, Sparkles, MessageSquare, History } from "lucide-
 import { Badge } from "@/components/ui/badge";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 export default function VocabularyPage() {
   const [word, setWord] = useState("");
@@ -39,15 +39,11 @@ export default function VocabularyPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
-          <div>
-            <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Vocabulary Builder</h1>
-            <p className="text-zinc-500 text-sm mt-1">Enhance your writing with high-band academic words.</p>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="Vocabulary Builder"
+        titleClassName="text-2xl font-serif"
+        description="Enhance your writing with high-band academic words."
+      />
 
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-[1000px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">

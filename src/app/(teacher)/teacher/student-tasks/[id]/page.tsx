@@ -18,8 +18,7 @@ import {
 import { ArrowLeft, Clock, Search, ExternalLink } from "lucide-react";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
-import { NotificationDropdown } from "@/components/notification-dropdown";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 interface Task {
   id: string;
@@ -116,34 +115,27 @@ export default function StudentTasksPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
-          <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
-            <ArrowLeft className="size-3.5" /> Dashboard
-          </Link>
-          <span className="text-zinc-700 select-none">/</span>
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">
-              {student ? `${student.name}'s Tasks` : "Student Tasks"}
-            </h1>
-            <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">
-              <span>Teacher</span>
-              <span>›</span>
-              <span className="text-zinc-400">Students</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Link href={`/teacher/assign?studentId=${studentId}`}>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-9 text-xs gap-1.5">
-              + Assign task
-            </Button>
-          </Link>
-          <NotificationDropdown />
-        </div>
-      </header>
+      <DashboardHeader
+        title={student ? `${student.name}'s Tasks` : "Student Tasks"}
+        breadcrumbs={[
+          { label: "Teacher" },
+          { label: "Students" }
+        ]}
+        beforeTitle={
+          <>
+            <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
+              <ArrowLeft className="size-3.5" /> Dashboard
+            </Link>
+            <span className="text-zinc-700 select-none">/</span>
+          </>
+        }
+      >
+        <Link href={`/teacher/assign?studentId=${studentId}`}>
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-9 text-xs gap-1.5">
+            + Assign task
+          </Button>
+        </Link>
+      </DashboardHeader>
 
       {/* Main Content */}
       <main className="flex-1 p-8">

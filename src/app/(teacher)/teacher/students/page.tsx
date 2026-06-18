@@ -10,8 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ArrowLeft, Users, CheckCircle, Clock } from "lucide-react";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
-import { NotificationDropdown } from "@/components/notification-dropdown";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 interface Student {
   id: string;
@@ -68,32 +67,28 @@ export default function MyStudentsPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Top Header */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
-          <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
-            <ArrowLeft className="size-3.5" /> Dashboard
-          </Link>
-          <span className="text-zinc-700 select-none">/</span>
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">My Students</h1>
-            <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">
-              <span>Teacher</span>
-              <span>›</span>
-              <span className="text-zinc-400">Classroom List</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Link href="/teacher/assign">
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-9 text-xs">
-              + Assign Task
-            </Button>
-          </Link>
-          <NotificationDropdown />
-        </div>
-      </header>
+      {/* Top Header */}
+      <DashboardHeader
+        title="My Students"
+        breadcrumbs={[
+          { label: "Teacher" },
+          { label: "Classroom List" }
+        ]}
+        beforeTitle={
+          <>
+            <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
+              <ArrowLeft className="size-3.5" /> Dashboard
+            </Link>
+            <span className="text-zinc-700 select-none">/</span>
+          </>
+        }
+      >
+        <Link href="/teacher/assign">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-9 text-xs">
+            + Assign Task
+          </Button>
+        </Link>
+      </DashboardHeader>
 
       {/* Main Container */}
       <main className="flex-1 p-8">

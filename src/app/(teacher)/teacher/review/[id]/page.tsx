@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Clock, MessageSquare, Award, BookOpen } from "lucide-react";
 import api from "@/lib/api";
-import { NotificationDropdown } from "@/components/notification-dropdown";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 interface TaskDetail {
   id: string;
@@ -156,38 +155,34 @@ export default function ReviewTaskPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
-          <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
-            <ArrowLeft className="size-3.5" /> Dashboard
-          </Link>
-          <span className="text-zinc-700 select-none">/</span>
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Review Task</h1>
-            <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">
-              <span>Teacher</span>
-              <span>›</span>
-              <span className="text-zinc-400">{isSubmitted ? "Review Mode" : "View Mode"}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Badge
-            className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
-              status === "ASSIGNED"
-                ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
-                : status === "SUBMITTED"
-                ? "bg-[var(--gold)]/10 text-[var(--gold)] border-[var(--gold)]/20"
-                : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-            }`}
-          >
-            {status}
-          </Badge>
-          <NotificationDropdown />
-        </div>
-      </header>
+      {/* Header */}
+      <DashboardHeader
+        title="Review Task"
+        breadcrumbs={[
+          { label: "Teacher" },
+          { label: isSubmitted ? "Review Mode" : "View Mode" }
+        ]}
+        beforeTitle={
+          <>
+            <Link href="/teacher" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 font-medium">
+              <ArrowLeft className="size-3.5" /> Dashboard
+            </Link>
+            <span className="text-zinc-700 select-none">/</span>
+          </>
+        }
+      >
+        <Badge
+          className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 border ${
+            status === "ASSIGNED"
+              ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+              : status === "SUBMITTED"
+              ? "bg-[var(--gold)]/10 text-[var(--gold)] border-[var(--gold)]/20"
+              : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+          }`}
+        >
+          {status}
+        </Badge>
+      </DashboardHeader>
 
       {/* Main Content */}
       <main className="flex-1 p-8">

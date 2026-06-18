@@ -23,8 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
-import { NotificationDropdown } from "@/components/notification-dropdown";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 interface Task {
   id: string;
@@ -236,9 +235,22 @@ export default function TaskReviewDetailPage() {
       )}
 
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
+      <DashboardHeader
+        title={
+          <>
+            {title}
+            <Badge variant="outline" className={`py-0.5 px-2.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${getStatusBadgeClass(status)}`}>
+              {getStatusIcon(status)}
+              {status}
+            </Badge>
+          </>
+        }
+        breadcrumbs={[
+          { label: "Admin" },
+          { label: "Review Queue", href: "/admin/review" },
+          { label: "Detail" }
+        ]}
+        beforeTitle={
           <Button 
             onClick={() => router.push("/admin/review")} 
             variant="ghost" 
@@ -247,35 +259,16 @@ export default function TaskReviewDetailPage() {
           >
             <ArrowLeft className="size-4" />
           </Button>
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-3">
-              {title}
-              <Badge variant="outline" className={`py-0.5 px-2.5 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${getStatusBadgeClass(status)}`}>
-                {getStatusIcon(status)}
-                {status}
-              </Badge>
-            </h1>
-            <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1.5 mt-0.5">
-              <span>Admin</span>
-              <span>›</span>
-              <span>Review Queue</span>
-              <span>›</span>
-              <span className="text-zinc-400">Detail</span>
-            </div>
+        }
+      >
+        {isScored && (
+          <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 py-1.5 px-4 rounded-xl">
+            <Award className="size-5 text-emerald-400" />
+            <span className="text-xs text-emerald-500 font-bold uppercase tracking-wider">Final Score:</span>
+            <span className="text-lg font-black text-emerald-400 font-mono">Band {bandScoreVal}</span>
           </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          {isScored && (
-            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 py-1.5 px-4 rounded-xl">
-              <Award className="size-5 text-emerald-400" />
-              <span className="text-xs text-emerald-500 font-bold uppercase tracking-wider">Final Score:</span>
-              <span className="text-lg font-black text-emerald-400 font-mono">Band {bandScoreVal}</span>
-            </div>
-          )}
-          <NotificationDropdown />
-        </div>
-      </header>
+        )}
+      </DashboardHeader>
 
       {/* Main Container */}
       <main className="flex-1 p-8 overflow-y-auto">

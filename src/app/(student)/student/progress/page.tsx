@@ -6,7 +6,7 @@ import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianG
 import { TrendingUp, Target, Award, BookOpen } from "lucide-react";
 import api from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 export default function ProgressPage() {
   const [data, setData] = useState<any[]>([]);
@@ -40,15 +40,11 @@ export default function ProgressPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="flex items-center justify-between px-8 py-6 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
-          <div>
-            <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Your Progress</h1>
-            <p className="text-zinc-500 text-sm mt-1">Track your band score journey and writing stats.</p>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="Your Progress"
+        titleClassName="text-2xl font-serif"
+        description="Track your band score journey and writing stats."
+      />
 
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-[1000px] mx-auto space-y-8">

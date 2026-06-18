@@ -25,8 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
-import { NotificationDropdown } from "@/components/notification-dropdown";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
 
 interface AuditLog {
   id?: string;
@@ -210,35 +209,27 @@ export default function AuditLogsPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#111614]">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-zinc-400 hover:text-white" />
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Audit Logs</h1>
-            <div className="text-[11px] text-zinc-500 font-medium tracking-wide flex items-center gap-1 mt-0.5">
-              <span>Admin</span>
-              <span>›</span>
-              <span className="text-zinc-400">Security & Logs</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => fetchLogs()} 
-            disabled={loading}
-            className="text-zinc-400 hover:text-white size-9 rounded-lg border border-white/10 bg-[#1a211e] cursor-pointer"
-          >
-            <RefreshCw className={`size-4 ${loading ? 'animate-spin' : ''}`} />
-          </Button>
-          <Button variant="outline" className="bg-[#1a211e] border-white/10 text-zinc-400 hover:text-white gap-2 h-9">
-            <Database className="size-4" />
-            Export Logs
-          </Button>
-          <NotificationDropdown />
-        </div>
-      </header>
+      <DashboardHeader
+        title="Audit Logs"
+        breadcrumbs={[
+          { label: "Admin" },
+          { label: "Security & Logs" }
+        ]}
+      >
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => fetchLogs()} 
+          disabled={loading}
+          className="text-zinc-400 hover:text-white size-9 rounded-lg border border-white/10 bg-[#1a211e] cursor-pointer animate-none"
+        >
+          <RefreshCw className={`size-4 ${loading ? 'animate-spin' : ''}`} />
+        </Button>
+        <Button variant="outline" className="bg-[#1a211e] border-white/10 text-zinc-400 hover:text-white gap-2 h-9">
+          <Database className="size-4" />
+          Export Logs
+        </Button>
+      </DashboardHeader>
 
       {/* Main Content */}
       <main className="flex-1 p-8">
