@@ -25,7 +25,7 @@ export default function LoginPage() {
     try {
       await login({ email, password });
     } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to sign in. Please check your credentials.");
+      setError(err.response?.data?.error?.message || err.response?.data?.message || "Failed to sign in. Please check your credentials.");
       setIsLoading(false);
     }
   };

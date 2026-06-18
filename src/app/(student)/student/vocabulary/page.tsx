@@ -30,7 +30,7 @@ export default function VocabularyPage() {
         setHistory(prev => [word.trim(), ...prev.slice(0, 4)]);
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Word not found. Please try another one.");
+      setError(err.response?.data?.error?.message || err.response?.data?.message || "Word not found. Please try another one.");
       setResult(null);
     } finally {
       setLoading(false);

@@ -9,7 +9,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (credentials: any) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  register: (data: any) => Promise<any>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
 }
@@ -109,15 +109,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const register = async (regData: any) => {
-    const { data } = await api.post<AuthResponse>('/auth/register', regData);
-    const { token, user } = data.data;
-    const accessToken = token;
-
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('user', JSON.stringify(user));
-    setUser(user);
-
-    router.push('/student'); // Default for new users
+    const { data } = await api.post<any>('/auth/register', regData);
+    
+    // If the response contains a user object, log them in automatically
+    if (data?.data?.user) {
+      const { token, user } = data.data;
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
+      router.push('/student');
+      return { success: true, loggedIn: true };
+    }
+    
+    // Otherwise (email verification flow), return success metadata
+    return {
+      success: true,
+      loggedIn: false,
+      message: data?.data?.message || data?.message || "Account created successfully. Please check your email to verify your account."
+    };
   };
 
   const logout = async () => {
