@@ -132,6 +132,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       await api.post('/auth/logout');
+    } catch (error) {
+      console.warn("Backend logout failed:", error);
     } finally {
       setUser(null);
       localStorage.removeItem('accessToken');

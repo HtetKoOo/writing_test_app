@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { EyeIcon, EyeOffIcon, AlertCircle } from "lucide-react";
 import { useAuth } from "@/components/auth-provider";
+import { API_URL } from "@/lib/api";
 
 export default function RegisterPage() {
   const { register: registerAuth } = useAuth();
@@ -61,8 +62,6 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://express-js-2kxb.onrender.com/api';
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 relative">

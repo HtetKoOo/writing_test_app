@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Backend URL - defaults to Render backend
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://express-js-2kxb.onrender.com/api';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const api = axios.create({
   baseURL: API_URL,

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { EyeIcon, EyeOffIcon, AlertCircle } from "lucide-react";
 import { useAuth } from "@/components/auth-provider";
+import { API_URL } from "@/lib/api";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -29,8 +30,6 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://express-js-2kxb.onrender.com/api';
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 relative">
