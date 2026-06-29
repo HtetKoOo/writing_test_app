@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem('user');
       
       // If we are on a protected route and auth fails, redirect to login
-      const publicPaths = ['/', '/login', '/register'];
+      const publicPaths = ['/', '/login', '/register', '/auth/callback'];
       if (typeof window !== 'undefined' && !publicPaths.includes(window.location.pathname)) {
         window.location.href = '/login';
       }
@@ -61,9 +61,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    // Intercept OAuth tokens in query parameters if present
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const token = searchParams.get('token') || searchParams.get('accessToken');
+      const userParam = searchParams.get('user');
+
+      if (token) {
+        localStorage.setItem('accessToken', token);
+        
+        if (userParam) {
+          try {
+            const decodedUser = decodeURIComponent(userParam);
+            const parsedUser = JSON.parse(decodedUser);
+            localStorage.setItem('user', JSON.stringify(parsedUser));
+            setUser(parsedUser);
+            
+            // Clean URL query params
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+
+            // Redirect based on role
+            if (parsedUser.role === 'admin') router.replace('/admin');
+            else if (parsedUser.role === 'teacher') router.replace('/teacher');
+            else router.replace('/student');
+            setIsLoading(false);
+            return;
+          } catch (e) {
+            console.error("Failed to parse user from query parameters:", e);
+          }
+        }
+
+        // If we have token but no user info, fetch it from backend
+        // Clean URL query params first
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+        
+        checkAuth().then(() => {
+          // After checkAuth successfully retrieves user, redirect based on user role
+          const storedUserStr = localStorage.getItem('user');
+          if (storedUserStr) {
+            const parsedUser = JSON.parse(storedUserStr);
+            if (parsedUser.role === 'admin') router.replace('/admin');
+            else if (parsedUser.role === 'teacher') router.replace('/teacher');
+            else router.replace('/student');
+          }
+        });
+        return;
+      }
+    }
+
     // Skip API calls on the public pages if no access token is present
     // This prevents the 401 Unauthorized error in the console when unauthenticated
-    const publicPaths = ['/', '/login', '/register'];
+    const publicPaths = ['/', '/login', '/register', '/auth/callback'];
     const hasToken = typeof window !== 'undefined' ? !!localStorage.getItem('accessToken') : false;
     const storedUserStr = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
 
@@ -72,8 +122,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // Redirect authenticated users away from login/register to their dashboard
-    if (hasToken && storedUserStr && ['/login', '/register'].includes(pathname)) {
+    // Redirect authenticated users away from login/register/callback to their dashboard
+    if (hasToken && storedUserStr && ['/login', '/register', '/auth/callback'].includes(pathname)) {
       try {
         const storedUser = JSON.parse(storedUserStr);
         if (storedUser.role === 'admin') {

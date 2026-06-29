@@ -44,6 +44,20 @@ export function NotificationDropdown() {
     };
   }, [isOpen]);
 
+  // Close dropdown when receiving close-dropdowns custom event
+  useEffect(() => {
+    const handleClose = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail?.sender !== "notification") {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("close-dropdowns", handleClose);
+    return () => {
+      window.removeEventListener("close-dropdowns", handleClose);
+    };
+  }, []);
+
   const fetchNotifications = async () => {
     try {
       setLoading(true);
@@ -59,8 +73,12 @@ export function NotificationDropdown() {
   };
 
   const handleToggle = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen) {
+    const nextOpen = !isOpen;
+    setIsOpen(nextOpen);
+    if (nextOpen) {
+      window.dispatchEvent(
+        new CustomEvent("close-dropdowns", { detail: { sender: "notification" } })
+      );
       fetchNotifications();
     }
   };

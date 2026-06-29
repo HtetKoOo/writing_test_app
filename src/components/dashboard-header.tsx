@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { NotificationDropdown } from "@/components/notification-dropdown";
+import { ProfileDropdown } from "@/components/profile-dropdown";
 import { cn } from "@/lib/utils";
 
 export interface BreadcrumbItem {
@@ -70,6 +71,7 @@ export function DashboardHeader({
       <div className="flex items-center gap-4">
         {children}
         {!hideNotification && <NotificationDropdown />}
+        <ProfileDropdown />
       </div>
     </header>
   );

@@ -22,8 +22,13 @@ export default function NewsPage() {
           api.get('/news/feed'),
           api.get('/news/categories')
         ]);
-        setNews(newsRes.data.data || []);
-        setCategories(["All", ...(catRes.data.data || [])]);
+        
+        // Correctly extract arrays from object wrappers returned by backend API
+        const articlesList = newsRes.data.data?.articles || (Array.isArray(newsRes.data.data) ? newsRes.data.data : []);
+        const categoriesList = catRes.data.data?.categories || (Array.isArray(catRes.data.data) ? catRes.data.data : []);
+
+        setNews(articlesList);
+        setCategories(["All", ...categoriesList]);
       } catch (error) {
         console.error("Failed to fetch news data:", error);
       } finally {
@@ -34,9 +39,36 @@ export default function NewsPage() {
     fetchData();
   }, []);
 
+  const formatTimeAgo = (dateStr: string) => {
+    if (!dateStr) return "Published recently";
+    try {
+      const d = new Date(dateStr.replace(" ", "T")); // handle YYYY-MM-DD HH:mm:ss format
+      const seconds = Math.floor((new Date().getTime() - d.getTime()) / 1000);
+      if (isNaN(seconds)) return "Published recently";
+      if (seconds < 60) return "Just now";
+      
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    } catch (e) {
+      return "Published recently";
+    }
+  };
+
   const filteredNews = activeCategory === "All" 
     ? news 
-    : news.filter(item => item.category === activeCategory);
+    : news.filter(item => {
+        if (!item.category) return false;
+        if (Array.isArray(item.category)) {
+          return item.category.includes(activeCategory.toLowerCase()) || item.category.includes(activeCategory);
+        }
+        return String(item.category).toLowerCase() === activeCategory.toLowerCase();
+      });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -62,7 +94,7 @@ export default function NewsPage() {
                   onClick={() => setActiveCategory(cat)}
                   className={`rounded-full px-6 h-10 shrink-0 ${activeCategory === cat ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'border-white/10 text-zinc-400 hover:text-white hover:bg-white/5'}`}
                 >
-                  {cat}
+                  {cat === "All" ? "All" : cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </Button>
               ))
             )}
@@ -87,47 +119,74 @@ export default function NewsPage() {
                   <p className="text-zinc-500">No news found for this category.</p>
                 </div>
               ) : (
-                filteredNews.map((item, i) => (
-                  <Card key={i} className="bg-[#1a211e] border-white/5 rounded-3xl shadow-none overflow-hidden group hover:border-emerald-500/30 transition-all cursor-pointer">
-                    <div className="flex flex-col md:flex-row h-full">
-                      <div className="md:w-1/3 relative overflow-hidden h-48 md:h-auto bg-zinc-800">
-                        <img 
-                          src={item.imageUrl || "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1000&auto=format&fit=crop"} 
-                          alt={item.title}
-                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60"
-                        />
-                        <Badge className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border-none text-[10px] font-bold tracking-widest uppercase">
-                          {item.category}
-                        </Badge>
-                      </div>
-                      <div className="p-6 md:w-2/3 flex flex-col">
-                        <div className="flex items-center gap-3 text-[10px] font-bold text-emerald-500 tracking-widest uppercase mb-3">
-                          {item.source || "Global Times"} • {item.readTime || "5 min read"}
+                filteredNews.map((item, i) => {
+                  const categoryName = Array.isArray(item.category) 
+                    ? item.category[0] 
+                    : item.category || "General";
+                  
+                  const formattedCategory = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+
+                  return (
+                    <Card 
+                      key={i} 
+                      onClick={() => item.link && window.open(item.link, '_blank')}
+                      className="bg-[#1a211e] border-white/5 rounded-3xl shadow-none overflow-hidden group hover:border-emerald-500/30 transition-all cursor-pointer"
+                    >
+                      <div className="flex flex-col md:flex-row h-full">
+                        <div className="md:w-1/3 relative overflow-hidden h-48 md:h-auto bg-zinc-800">
+                          <img 
+                            src={item.image_url || "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1000&auto=format&fit=crop"} 
+                            alt={item.title}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60"
+                          />
+                          <Badge className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border-none text-[10px] font-bold tracking-widest uppercase">
+                            {formattedCategory}
+                          </Badge>
                         </div>
-                        <h3 className="text-xl font-bold text-white font-serif group-hover:text-emerald-400 transition-colors mb-3 leading-tight">
-                          {item.title}
-                        </h3>
-                        <p className="text-zinc-500 text-sm line-clamp-2 mb-6">
-                          {item.description || item.summary || "Explore the latest developments in this topic. Perfect for building vocabulary and topic knowledge for Task 2 essays."}
-                        </p>
-                        <div className="mt-auto flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <Button variant="ghost" size="sm" className="h-8 text-zinc-500 hover:text-white hover:bg-white/5 px-2 gap-2">
-                              <Bookmark className="size-4" /> Save
-                            </Button>
-                            <Button variant="ghost" size="sm" className="h-8 text-zinc-500 hover:text-white hover:bg-white/5 px-2 gap-2">
-                              <ExternalLink className="size-4" /> Read
-                            </Button>
+                        <div className="p-6 md:w-2/3 flex flex-col">
+                          <div className="flex items-center gap-3 text-[10px] font-bold text-emerald-500 tracking-widest uppercase mb-3">
+                            {item.source_name || "Global Times"} • {item.readTime || "5 min read"}
                           </div>
-                          <span className="text-[10px] text-zinc-600 font-medium italic">
-                            Published 2 hours ago
-                          </span>
+                          <h3 className="text-xl font-bold text-white font-serif group-hover:text-emerald-400 transition-colors mb-3 leading-tight">
+                            {item.title}
+                          </h3>
+                          <p className="text-zinc-500 text-sm line-clamp-2 mb-6">
+                            {item.description || item.summary || "Explore the latest developments in this topic. Perfect for building vocabulary and topic knowledge for Task 2 essays."}
+                          </p>
+                          <div className="mt-auto flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                }}
+                                className="h-8 text-zinc-500 hover:text-white hover:bg-white/5 px-2 gap-2"
+                              >
+                                <Bookmark className="size-4" /> Save
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  item.link && window.open(item.link, '_blank');
+                                }}
+                                className="h-8 text-zinc-500 hover:text-white hover:bg-white/5 px-2 gap-2"
+                              >
+                                <ExternalLink className="size-4" /> Read
+                              </Button>
+                            </div>
+                            <span className="text-[10px] text-zinc-600 font-medium italic">
+                              {formatTimeAgo(item.pubDate)}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                )
-              ))}
+                    </Card>
+                  );
+                })
+              )}
             </div>
 
             {/* Sidebar Column */}

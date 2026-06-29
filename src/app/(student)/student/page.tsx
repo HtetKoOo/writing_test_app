@@ -4,10 +4,9 @@ import React from "react";
 import { StudentStats } from "@/components/student/student-stats";
 import { AssignedTasks } from "@/components/student/assigned-tasks";
 import { RecentWriting } from "@/components/student/recent-writing";
-import { Search, Bell, Sparkles } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/auth-provider";
 import { DashboardHeader } from "@/components/dashboard-header";
 
@@ -20,7 +19,6 @@ export default function StudentDashboard() {
       <DashboardHeader
         title="Student Dashboard"
         breadcrumbs={[{ label: "Student" }, { label: "Overview" }]}
-        hideNotification={true}
         leftContent={
           <div className="relative hidden md:block w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
@@ -35,15 +33,6 @@ export default function StudentDashboard() {
           <Sparkles className="size-3" />
           <span>Target: Band 7.5</span>
         </div>
-        <Button variant="ghost" size="icon" className="size-9 rounded-full bg-[#1a211e] border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10">
-          <Bell className="size-4" />
-        </Button>
-        <Avatar className="size-9 border-2 border-gold/30 rounded-full">
-          <AvatarImage src="" />
-          <AvatarFallback className="bg-white text-black font-bold text-xs">
-            {user?.name?.substring(0, 2).toUpperCase() || 'ST'}
-          </AvatarFallback>
-        </Avatar>
       </DashboardHeader>
 
       {/* Main Content */}

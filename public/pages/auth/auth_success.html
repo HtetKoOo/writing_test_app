@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Completing Sign In</title>
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --bg: #020617;
+      --card-bg: rgba(15, 23, 42, 0.6);
+      --border: rgba(255, 255, 255, 0.05);
+      --text: #ffffff;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 400px;
+      width: 90%;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .logo {
+      display: inline-flex;
+      height: 48px;
+      width: 48px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--gold);
+      color: #020617;
+      font-weight: bold;
+      font-size: 1.25rem;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.025em;
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin: 0 0 24px 0;
+    }
+
+    .spinner {
+      margin: 0 auto;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(212, 175, 55, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--gold);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">IE</div>
+    <div class="spinner"></div>
+    <h2 id="status-title">Completing Sign In</h2>
+    <p id="status-desc">Verifying credentials and setting up your workspace...</p>
+  </div>
+
+  <script>
+    (function() {
+      try {
+        const searchParams = new URLSearchParams(window.location.search);
+        const token = searchParams.get('token') || searchParams.get('accessToken');
+        const userParam = searchParams.get('user');
+
+        if (token) {
+          // Store token
+          localStorage.setItem('accessToken', token);
+
+          let userObj = null;
+          if (userParam) {
+            try {
+              // Try URL-decoded JSON first
+              userObj = JSON.parse(decodeURIComponent(userParam));
+            } catch (e1) {
+              try {
+                // Try Base64-decoded JSON
+                userObj = JSON.parse(atob(userParam));
+              } catch (e2) {
+                console.error("Failed to parse user parameter", e2);
+              }
+            }
+          }
+
+          if (userObj) {
+            localStorage.setItem('user', JSON.stringify(userObj));
+            redirectUser(userObj.role);
+          } else {
+            // If no user info is present, redirect to a loading state to call /users/me
+            window.location.href = '/login'; 
+          }
+        } else {
+          showError("No authentication token was received from the server.");
+        }
+      } catch (err) {
+        showError("An unexpected error occurred during sign in: " + err.message);
+      }
+
+      function redirectUser(role) {
+        if (role === 'admin') window.location.href = '/admin';
+        else if (role === 'teacher') window.location.href = '/teacher';
+        else window.location.href = '/student';
+      }
+
+      function showError(message) {
+        document.getElementById('status-title').innerText = "Authentication Failed";
+        document.getElementById('status-desc').innerText = message;
+        // Hide spinner
+        document.querySelector('.spinner').style.display = 'none';
+        
+        // Add a back button
+        const btn = document.createElement('button');
+        btn.innerText = "Back to Sign In";
+        btn.style.marginTop = "16px";
+        btn.style.padding = "10px 20px";
+        btn.style.backgroundColor = "var(--gold)";
+        btn.style.color = "#020617";
+        btn.style.border = "none";
+        btn.style.borderRadius = "8px";
+        btn.style.fontWeight = "600";
+        btn.style.cursor = "pointer";
+        btn.onclick = function() {
+          window.location.href = '/login';
+        };
+        document.querySelector('.container').appendChild(btn);
+      }
+    })();
+  </script>
+</body>
+</html>

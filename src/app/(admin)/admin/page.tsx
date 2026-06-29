@@ -4,7 +4,6 @@ import { ChartsSection } from "@/components/admin/charts-section";
 import { DataListsSection } from "@/components/admin/data-lists";
 import { RecentAuditsSection } from "@/components/admin/recent-audits";
 import { Search } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { DashboardHeader } from "@/components/dashboard-header";
 
@@ -27,12 +26,7 @@ export default function AdminDashboard() {
             />
           </div>
         }
-      >
-        <Avatar className="size-9 border-2 border-[var(--gold)]/30 rounded-full">
-          <AvatarImage src="" />
-          <AvatarFallback className="bg-white text-black font-bold text-xs">AD</AvatarFallback>
-        </Avatar>
-      </DashboardHeader>
+      />
 
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto">
